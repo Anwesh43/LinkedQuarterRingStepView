@@ -149,4 +149,24 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
         }
     }
 
+    data class QuarterRingStep(var i : Int) {
+
+        private var curr : QRSNode = QRSNode(0)
+
+        private var dir : Int = 1
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            curr.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            curr.update {i , scl ->
+                cb(i, scl)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            curr.startUpdating(cb)
+        }
+    }
 }
