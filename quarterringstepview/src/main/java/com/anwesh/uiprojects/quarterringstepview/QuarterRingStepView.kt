@@ -12,6 +12,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.RectF
 import android.content.Context
+import android.content.pm.ActivityInfo
 
 val nodes : Int = 5
 val rings : Int = 4
@@ -25,7 +26,7 @@ fun Canvas.drawQRSNode(i : Int, scale : Float, paint : Paint) {
     val rRing : Float = gap/15
     val scGap : Float = 1f / rings
     paint.style = Paint.Style.STROKE
-    paint.strokeWidth = Math.min(w, h) / 120
+    paint.strokeWidth = Math.min(w, h) / 90
     paint.strokeCap = Paint.Cap.ROUND
     paint.color = Color.parseColor("#673AB7")
     save()
@@ -203,6 +204,7 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
 
         fun create(activity : Activity) : QuarterRingStepView {
             val view : QuarterRingStepView = QuarterRingStepView(activity)
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             activity.setContentView(view)
             return view
         }
