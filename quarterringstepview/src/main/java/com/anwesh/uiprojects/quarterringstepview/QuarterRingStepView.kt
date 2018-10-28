@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.quarterringstepview
  * Created by anweshmishra on 28/10/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.graphics.Paint
@@ -192,6 +193,15 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
             qrs.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+
+        fun create(activity : Activity) : QuarterRingStepView {
+            val view : QuarterRingStepView = QuarterRingStepView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
