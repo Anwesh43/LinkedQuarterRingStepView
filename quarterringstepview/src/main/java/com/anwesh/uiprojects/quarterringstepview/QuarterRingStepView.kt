@@ -13,6 +13,32 @@ import android.graphics.RectF
 import android.content.Context
 
 val nodes : Int = 5
+val rings : Int = 4
+
+fun Canvas.drawQRSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val deg : Float = 360f / rings
+    val r : Float = gap / 3
+    val rRing : Float = gap/10
+    val scGap : Float = 1f / rings
+    paint.style = Paint.Style.STROKE
+    paint.strokeWidth = Math.min(w, h) / 60
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.color = Color.parseColor("#673AB7")
+    save()
+    translate(gap + i * gap, h/2)
+    for (j in 0..rings - 1) {
+        val sc : Float = Math.min(scGap, Math.max(0f, scale - scGap * j)) * rings
+        save()
+        rotate(deg * i)
+        translate(0f, -(r - rRing))
+        drawArc(RectF(-rRing, -rRing, rRing, rRing), -90f, 360f * sc, false, paint)
+        restore()
+    }
+    restore()
+}
 
 class QuarterRingStepView(ctx : Context) : View(ctx) {
 
