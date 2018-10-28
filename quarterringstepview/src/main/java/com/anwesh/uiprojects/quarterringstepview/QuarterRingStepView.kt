@@ -104,4 +104,49 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class QRSNode(var i : Int, val state : State = State()) {
+
+        private var prev : QRSNode? = null
+        private var next : QRSNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = QRSNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawQRSNode(i, state.scale, paint)
+            prev?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : QRSNode {
+            var curr : QRSNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
+
 }
