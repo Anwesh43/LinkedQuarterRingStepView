@@ -169,4 +169,27 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : QuarterRingStepView) {
+
+        private val qrs : QuarterRingStep = QuarterRingStep(0)
+
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            qrs.draw(canvas, paint)
+            animator.animate {
+                qrs.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            qrs.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
