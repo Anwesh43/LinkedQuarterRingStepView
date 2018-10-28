@@ -22,10 +22,10 @@ fun Canvas.drawQRSNode(i : Int, scale : Float, paint : Paint) {
     val gap : Float = w / (nodes + 1)
     val deg : Float = 360f / rings
     val r : Float = gap / 3
-    val rRing : Float = gap/10
+    val rRing : Float = gap/15
     val scGap : Float = 1f / rings
     paint.style = Paint.Style.STROKE
-    paint.strokeWidth = Math.min(w, h) / 60
+    paint.strokeWidth = Math.min(w, h) / 120
     paint.strokeCap = Paint.Cap.ROUND
     paint.color = Color.parseColor("#673AB7")
     save()
@@ -33,7 +33,7 @@ fun Canvas.drawQRSNode(i : Int, scale : Float, paint : Paint) {
     for (j in 0..rings - 1) {
         val sc : Float = Math.min(scGap, Math.max(0f, scale - scGap * j)) * rings
         save()
-        rotate(deg * i)
+        rotate(deg * j)
         translate(0f, -(r - rRing))
         drawArc(RectF(-rRing, -rRing, rRing, rRing), -90f, 360f * sc, false, paint)
         restore()
@@ -63,7 +63,7 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += 0.05f * dir
+            scale += (0.1f / rings) * dir
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
@@ -164,6 +164,9 @@ class QuarterRingStepView(ctx : Context) : View(ctx) {
 
         fun update(cb : (Int, Float) -> Unit) {
             curr.update {i , scl ->
+                curr = curr.getNext(dir) {
+                    dir *= -1
+                }
                 cb(i, scl)
             }
         }
